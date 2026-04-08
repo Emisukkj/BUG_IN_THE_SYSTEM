@@ -20,7 +20,7 @@ export function getLineCells(r0, c0, r1, c1) {
 // (garante que sempre começa pelo menor r, ou menor c se r igual)
 function normalizeCells(cells) {
   const first = cells[0];
-  const last  = cells[cells.length - 1];
+  const last = cells[cells.length - 1];
   const shouldReverse =
     last.r < first.r ||
     (last.r === first.r && last.c < first.c);
@@ -34,9 +34,9 @@ function cellsEqual(a, b) {
 
 export default function useGame(puzzle) {
   const [foundWords, setFoundWords] = useState([]);
-  const [dragCells, setDragCells]   = useState([]);
-  const [dragging, setDragging]     = useState(false);
-  const [flash, setFlash]           = useState(null);
+  const [dragCells, setDragCells] = useState([]);
+  const [dragging, setDragging] = useState(false);
+  const [flash, setFlash] = useState(null);
   const startCell = useRef(null);
 
   useEffect(() => {
@@ -53,8 +53,27 @@ export default function useGame(puzzle) {
       return e ? e.cells.map(({ r, c }) => cellKey(r, c)) : [];
     })
   );
-  const dragSet  = new Set(dragCells.map(({ r, c }) => cellKey(r, c)));
+  const dragSet = new Set(dragCells.map(({ r, c }) => cellKey(r, c)));
   const allFound = puzzle?.wordList.every((e) => foundWords.includes(e.word)) ?? false;
+
+  // No useGame.js, após allFound:
+  function getHiddenAnswer(puzzle) {
+    if (!puzzle?.hiddenAnswer) return null;
+    const usedCells = new Set(
+      puzzle.wordList.flatMap(e => e.cells.map(({ r, c }) => cellKey(r, c)))
+    );
+    const free = [];
+    for (let r = 0; r < puzzle.grid.length; r++) {
+      for (let c = 0; c < puzzle.grid[r].length; c++) {
+        if (!usedCells.has(cellKey(r, c))) {
+          free.push(puzzle.grid[r][c]);
+        }
+      }
+    }
+    return free.join('').startsWith(puzzle.hiddenAnswer)
+      ? puzzle.hiddenAnswer
+      : null;
+  }
 
   function tryMatch(cells) {
     if (!puzzle || cells.length < 2) return null;
