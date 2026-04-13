@@ -124,6 +124,15 @@ const case4 = {
 
   hiddenClues: ["TOKEN", "LEAK"],
 
+  hiddenAnswer: "INVASAO",
+  narrative:
+    "O caso mais complexo da série. Uma cadeia de falhas encobriu o verdadeiro culpado por dias. A vulnerabilidade estava na API exposta sem autenticação — alguém internamente sabia do buraco e explorou antes que fosse corrigido. As evidências foram cuidadosamente apagadas, mas os logs de REDE não mentem.",
+  culprit: "EMERSON",
+  language: "GRAPHQL",
+  location: "KUBERNETES",
+
+  hiddenClues: ["TOKEN", "LEAK"],
+
   explanation: `
   - GRAPHQL indica a origem da falha (query sem validação)
   - KUBERNETES mostra o ambiente comprometido
